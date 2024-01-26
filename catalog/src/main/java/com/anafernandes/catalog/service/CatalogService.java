@@ -90,7 +90,7 @@ public class CatalogService {
     }
 
     public Integer getStockFallback(Integer bookId, Exception exception) {
-        System.out.println("**************************** Fallback " + exception.getMessage());
+        System.out.println("**************************** Fallback " + exception.getClass());
         return 0;
     }
 
@@ -98,6 +98,18 @@ public class CatalogService {
 
         var book = bookRepository.getBookByTitle(bookTitle);
 
+        if (book != null) {
+
+            var bookId = book.getId();
+
+            StockDto stockDto = restTemplate.getForObject(
+                    "http://STOCK/api/v1/stock/{bookId}",
+                    StockDto.class,
+                    bookId
+            );
+
+            book.setStockAvailable(stockDto.getStockAvailable());
+        }
         return bookMapper.toDto(book);
     }
 

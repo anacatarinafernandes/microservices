@@ -2,6 +2,7 @@ package com.anafernandes.catalog.controller;
 
 import com.anafernandes.catalog.dto.AuthorDto;
 import com.anafernandes.catalog.dto.BookDto;
+import com.anafernandes.catalog.exception.BookNotFoundException;
 import com.anafernandes.catalog.service.CatalogService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.annotation.security.RolesAllowed;
@@ -62,21 +63,23 @@ public class CatalogController {
 
     @GetMapping(path = "/book/{bookTitle}")
     @RolesAllowed("user")
-    public ResponseEntity<BookDto> getBookByTitle(@PathVariable("bookTitle") String bookTitle) {
+    public ResponseEntity<BookDto> getBookByTitle(@PathVariable("bookTitle") String bookTitle) throws BookNotFoundException {
 
         BookDto book = catalogService.GetBookDetails(bookTitle);
 
-        return new ResponseEntity<>(book, HttpStatus.OK);
+        if (book != null) {
 
-
+            return new ResponseEntity<>(book, HttpStatus.OK);
+        }
+        throw new BookNotFoundException("Book with title " + bookTitle + " not found");
     }
+
 
     @GetMapping(path = "/book/filter")
     @RolesAllowed("user")
     public ResponseEntity<List<BookDto>> filterBooks(@RequestParam(name = "author", required = false) String author,
                                                      @RequestParam(name = "category", required = false) String category,
-                                                     @RequestParam(name = "maxPrice", required = false) Double maxPrice
-    ) {
+                                                     @RequestParam(name = "maxPrice", required = false) Double maxPrice) {
 
         List<BookDto> books = catalogService.filterBooks(author, category, maxPrice);
 

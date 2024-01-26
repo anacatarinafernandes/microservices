@@ -31,7 +31,7 @@ public class Book {
     private Integer isbn;
     @Column(nullable = false)
     private String language;
-    @Column(nullable = false)
+    @Transient
     private Integer stockAvailable;
     @Column(nullable = false)
     private Double price;
