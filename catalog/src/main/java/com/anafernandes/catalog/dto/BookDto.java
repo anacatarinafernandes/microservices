@@ -26,4 +26,6 @@ public class BookDto {
     private Set<AuthorDto> authors = new HashSet<>();
 
     private CategoryDto category;
+
+    private String availability;
 }

@@ -14,4 +14,7 @@ public interface StockRepository extends JpaRepository<Stock, Integer> {
     @Query("SELECT s FROM Stock s WHERE s.stockAvailable = 0")
     List<Stock> getBooksOutOfStock();
 
+    @Query("SELECT s FROM Stock s WHERE s.stockAvailable < 3")
+    List<Stock> getBooksWithLowStock();
+
 }

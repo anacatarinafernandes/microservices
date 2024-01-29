@@ -49,6 +49,11 @@
             <artifactId>mapstruct</artifactId>
             <version>1.4.2.Final</version>
         </dependency>
+        <dependency>
+            <groupId>org.jobrunr</groupId>
+            <artifactId>jobrunr-spring-boot-3-starter</artifactId> <!-- replace x with your Spring Boot version -->
+            <version>6.2.3</version>
+        </dependency>
 
     </dependencies>
 

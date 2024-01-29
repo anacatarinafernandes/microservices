@@ -48,10 +48,24 @@ public class CatalogController {
 
 
     @GetMapping(path = "/books")
-    @RolesAllowed("user")
+    @RolesAllowed("admin")
     public ResponseEntity<List<BookDto>> GetAllBooks() {
 
         List<BookDto> books = catalogService.GetAllBooks();
+
+        if (books.isEmpty()) {
+
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(books, HttpStatus.OK);
+
+    }
+
+    @GetMapping(path = "/books/available")
+    @RolesAllowed("user")
+    public ResponseEntity<List<BookDto>> GetAvailableBooks() {
+
+        List<BookDto> books = catalogService.GetAvailableBooks();
 
         if (books.isEmpty()) {
 

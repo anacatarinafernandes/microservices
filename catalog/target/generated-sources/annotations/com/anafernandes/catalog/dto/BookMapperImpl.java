@@ -5,6 +5,7 @@ import com.anafernandes.catalog.dto.BookDto.BookDtoBuilder;
 import com.anafernandes.catalog.dto.CategoryDto.CategoryDtoBuilder;
 import com.anafernandes.catalog.model.Author;
 import com.anafernandes.catalog.model.Author.AuthorBuilder;
+import com.anafernandes.catalog.model.Availability;
 import com.anafernandes.catalog.model.Book;
 import com.anafernandes.catalog.model.Book.BookBuilder;
 import com.anafernandes.catalog.model.Category;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-01-26T13:06:59+0000",
+    date = "2024-01-29T11:25:48+0000",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 21.0.1 (Oracle Corporation)"
 )
 @Component
@@ -32,6 +33,9 @@ public class BookMapperImpl implements BookMapper {
 
         BookDtoBuilder bookDto = BookDto.builder();
 
+        if ( book.getAvailability() != null ) {
+            bookDto.availability( book.getAvailability().name() );
+        }
         bookDto.title( book.getTitle() );
         bookDto.originalTitle( book.getOriginalTitle() );
         bookDto.isbn( book.getIsbn() );
@@ -54,6 +58,9 @@ public class BookMapperImpl implements BookMapper {
 
         BookBuilder book1 = Book.builder();
 
+        if ( book.getAvailability() != null ) {
+            book1.availability( Enum.valueOf( Availability.class, book.getAvailability() ) );
+        }
         book1.title( book.getTitle() );
         book1.originalTitle( book.getOriginalTitle() );
         book1.isbn( book.getIsbn() );

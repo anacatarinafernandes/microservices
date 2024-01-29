@@ -24,4 +24,5 @@ public class BookRequest {
     private LocalDateTime dateUpdated;
     private List<String> authors;
     private String category;
+    private String availability;
 }

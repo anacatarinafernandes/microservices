@@ -7,6 +7,7 @@ import com.anafernandes.catalog.dto.AuthorMapper;
 import com.anafernandes.catalog.dto.BookDto;
 import com.anafernandes.catalog.dto.BookMapper;
 import com.anafernandes.catalog.model.Author;
+import com.anafernandes.catalog.model.Availability;
 import com.anafernandes.catalog.model.Book;
 import com.anafernandes.catalog.model.Category;
 import com.anafernandes.catalog.repository.AuthorRepository;
@@ -59,6 +60,7 @@ public class CatalogService {
 
         book.setAuthors(authors);
         book.setCategory(category);
+        book.setAvailability(Availability.valueOf(bookRequest.getAvailability()));
 
         Book bookSaved = bookRepository.saveAndFlush(book);
 
@@ -79,7 +81,6 @@ public class CatalogService {
 
     @Retry(name = "getStockRetry", fallbackMethod = "getStockFallback")
     public Integer getBookStock(Integer bookId) {
-        System.out.println("**************************** Get book stock ");
         StockDto stockDto = restTemplate.getForObject(
                 "http://STOCK/api/v1/stock/{bookId}",
                 StockDto.class,
@@ -90,7 +91,6 @@ public class CatalogService {
     }
 
     public Integer getStockFallback(Integer bookId, Exception exception) {
-        System.out.println("**************************** Fallback " + exception.getClass());
         return 0;
     }
 
@@ -115,7 +115,27 @@ public class CatalogService {
 
     public List<BookDto> GetAllBooks() {
 
-        return bookMapper.toDtoList(bookRepository.findAll());
+        List<Book> books = bookRepository.findAll();
+
+        for (Book book : books) {
+
+            book.setStockAvailable(getBookStock(book.getId()));
+
+        }
+        return bookMapper.toDtoList(books);
+    }
+
+    public List<BookDto> GetAvailableBooks() {
+
+        List<Book> availableBooks = bookRepository.getAvailableBooks();
+
+        for (Book book : availableBooks) {
+
+            book.setStockAvailable(getBookStock(book.getId()));
+
+        }
+
+        return bookMapper.toDtoList(availableBooks);
     }
 
     public void addAuthors(List<AuthorDto> authorRequests) {

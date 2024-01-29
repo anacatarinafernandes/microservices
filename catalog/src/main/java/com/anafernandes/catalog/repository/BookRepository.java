@@ -18,4 +18,6 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     @Query("SELECT b FROM Book b JOIN b.authors a WHERE (:authorId is null or a.id= :authorId )AND (:categoryId is null OR b.category.Id = :categoryId) AND (:maxPrice is null OR b.price <= :maxPrice)")
     List<Book> filterBooks(@Param("authorId") Integer authorId, @Param("categoryId") Integer categoryId, @Param("maxPrice") Double maxPrice);
 
+    @Query("SELECT b FROM Book b WHERE b.availability != 'UNAVAILABLE'")
+    List<Book> getAvailableBooks();
 }

@@ -12,6 +12,8 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(uniqueConstraints = {
+        @UniqueConstraint(name = "UniqueIsbnLanguage ", columnNames = {"isbn", "language"})})
 public class Book {
     @Id
     @SequenceGenerator(
@@ -27,7 +29,7 @@ public class Book {
     @Column(nullable = false, unique = true)
     private String title;
     private String originalTitle;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private Integer isbn;
     @Column(nullable = false)
     private String language;
@@ -49,5 +51,8 @@ public class Book {
     @JoinColumn(name = "category_id")
     @EqualsAndHashCode.Exclude
     Category category;
+
+    @Enumerated(EnumType.STRING)
+    private Availability availability;
 
 }
