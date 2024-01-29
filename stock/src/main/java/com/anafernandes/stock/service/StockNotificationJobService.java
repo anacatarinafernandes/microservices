@@ -2,6 +2,8 @@ package com.anafernandes.stock.service;
 
 import com.anafernandes.stock.model.Stock;
 import com.anafernandes.stock.repository.StockRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jobrunr.jobs.annotations.Job;
 import org.jobrunr.spring.annotations.Recurring;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Service;
 public class StockNotificationJobService {
 
     private final StockRepository stockRepository;
+
+    private static final Logger logger = LogManager.getLogger(StockNotificationJobService.class);
 
     public StockNotificationJobService(StockRepository stockRepository) {
         this.stockRepository = stockRepository;
@@ -24,7 +28,7 @@ public class StockNotificationJobService {
 
         for (Stock stock : lowStockBooks) {
 
-            System.out.println("Book with id " + stock.getBookId() + " has low stock");
+            logger.warn("Book with id " + stock.getBookId() + " has low stock");
 
         }
 

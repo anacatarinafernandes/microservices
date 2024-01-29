@@ -6,20 +6,22 @@ import com.anafernandes.catalog.exception.BookNotFoundException;
 import com.anafernandes.catalog.service.CatalogService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.annotation.security.RolesAllowed;
-import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Slf4j
 @RestController
 @RequestMapping("api/v1/catalog")
 @SecurityRequirement(name = "custom")
 
 public class CatalogController {
     private final CatalogService catalogService;
+    private static final Logger logger = LogManager.getLogger(CatalogController.class);
+
 
     public CatalogController(CatalogService catalogService) {
         this.catalogService = catalogService;
@@ -28,7 +30,6 @@ public class CatalogController {
     @PostMapping(path = "/books")
     @RolesAllowed("admin")
     public void registerBooks(@RequestBody List<BookRequest> bookRequests) {
-        log.info("new book registration {}" + bookRequests);
         for (BookRequest bookRequest : bookRequests) {
             catalogService.registerBook(bookRequest);
         }
@@ -37,8 +38,8 @@ public class CatalogController {
     @PostMapping(path = "/book")
     @RolesAllowed("admin")
     public ResponseEntity<BookDto> registerBook(@RequestBody BookRequest bookRequest) {
-        log.info("new book registration {}" + bookRequest);
-        System.out.println("**** add stock  ****");
+        logger.info("new book registration {}" + bookRequest);
+
 
         BookDto book = catalogService.registerBook(bookRequest);
 
@@ -105,14 +106,13 @@ public class CatalogController {
     @PostMapping(path = "/authors")
     @RolesAllowed("admin")
     public void registerAuthors(@RequestBody List<AuthorDto> authorRequests) {
-        log.info("new author registration {}" + authorRequests);
         catalogService.addAuthors(authorRequests);
     }
 
     @PostMapping(path = "/author")
     @RolesAllowed("admin")
     public ResponseEntity<AuthorDto> registerAuthor(@RequestBody AuthorDto authorRequest) {
-        log.info("new author registration {}" + authorRequest);
+        logger.info("new author registration {}" + authorRequest);
         AuthorDto author = catalogService.addAuthor(authorRequest);
         return new ResponseEntity<>(author, HttpStatus.OK);
 

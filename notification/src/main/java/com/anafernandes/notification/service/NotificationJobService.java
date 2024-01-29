@@ -2,6 +2,8 @@ package com.anafernandes.notification.service;
 
 import com.anafernandes.notification.model.Notification;
 import com.anafernandes.notification.repository.NotificationRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jobrunr.jobs.annotations.Job;
 import org.jobrunr.spring.annotations.Recurring;
 import org.springframework.stereotype.Service;
@@ -9,6 +11,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class NotificationJobService {
     private final NotificationRepository notificationRepository;
+
+    private static final Logger logger = LogManager.getLogger(NotificationJobService.class);
+
 
     public NotificationJobService(NotificationRepository notificationRepository) {
         this.notificationRepository = notificationRepository;
@@ -25,7 +30,7 @@ public class NotificationJobService {
         for (Notification notification : notifications) {
 
             String email = notification.getCustomerEmail();
-            System.out.println("Sending notification to " + email);
+            logger.info("Sending notification to " + email);
 
         }
 

@@ -5,6 +5,8 @@ import com.anafernandes.notification.dto.NotificationMapper;
 import com.anafernandes.notification.model.Notification;
 import com.anafernandes.notification.repository.NotificationRepository;
 import com.anafernandes.stock.model.Stock;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,8 @@ public class NotificationService {
 
     private final NotificationRepository notificationRepository;
     private final NotificationMapper notificationMapper;
+
+    private static final Logger logger = LogManager.getLogger(NotificationService.class);
 
     public NotificationService(NotificationRepository notificationRepository, NotificationMapper notificationMapper) {
         this.notificationRepository = notificationRepository;
@@ -39,7 +43,7 @@ public class NotificationService {
         }
 
 
-        System.out.println("Received message from queue " + ": " + message.toString());
+        logger.info("Received message from queue " + ": " + message.toString());
     }
 
     public NotificationDto addNotification(NotificationDto notificationRequest) {
