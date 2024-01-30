@@ -36,6 +36,7 @@ public class CatalogService {
     private final AuthorMapper authorMapper;
     private final BookMapper bookMapper;
 
+
     public BookDto registerBook(BookRequest bookRequest) {
 
         Set<Author> authors = new HashSet<Author>();
@@ -62,11 +63,13 @@ public class CatalogService {
         book.setCategory(category);
         book.setAvailability(Availability.valueOf(bookRequest.getAvailability()));
 
+
         Book bookSaved = bookRepository.saveAndFlush(book);
 
         addStock(book);
-
+        
         return bookMapper.toDto(bookSaved);
+
     }
 
 
